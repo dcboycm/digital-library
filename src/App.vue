@@ -15,122 +15,54 @@
           :key="book.id">
           <md-table-cell><a :href="book.url">{{book.title}}</a></md-table-cell>
           <md-table-cell>{{book.author}}</md-table-cell>
-          <md-table-cell><md-button class="md-icon-button" @click="removeBook(book)"><md-icon>delete</md-icon></md-button></md-table-cell>
+          <md-table-cell><md-button class="md-icon-button" @click="openModel(book)"><md-icon>delete</md-icon></md-button></md-table-cell>
           <md-table-cell><md-button class="md-icon-button" @click="editBook(book)"><md-icon>mode_edit</md-icon></md-button></md-table-cell>
         </md-table-row>
       </md-table>
     </div>
 
-    <!-- Old Add a Book Form -->
-    <div class="form">
-      <form id="form" novalidate class="" v-on:submit.prevent="addBook">
-        <md-card class="md-layout-item">
-          <md-card-header>
-            <div class="md-title">Add a Book</div>
-          </md-card-header>
+    <md-button class="md-primary md-raised" @click="addBookModal= true">Add a Book</md-button>
 
-          <md-field>
-            <label for="bookTitle">Title:</label>
-            <md-input type="text" id="bookTitle" class="form-control" v-model="newBook.title"/>
-          </md-field>
-          <md-field>
-            <label for="bookAuthor">Author:</label>
-            <md-input type="text" id="bookAuthor" class="form-control" v-model="newBook.author"/>
-          </md-field>
-          <md-field>
-            <label for="bookUrl">Url:</label>
-            <md-input type="text" id="bookUrl" class="form-control" v-model="newBook.url"/>
-          </md-field>
-          <md-button type="submit" class="md-raised">Add Book</md-button>
-        </md-card>
-      </form>
-    </div>
+    <!-- Add book dialog -->
+    <md-dialog
+      :md-active.sync="addBookModal"
+      :md-fullscreen="false" >
+      <md-dialog-title>Add a Book</md-dialog-title>
 
-    <!-- Add a Book Form -->
-    <!-- <div>
-      <form novalidate class="md-layout" @submit.prevent="validateUser">
-        <md-card class="md-layout-item md-size-50 md-small-size-100">
-          <md-card-header>
-            <div class="md-title">Users</div>
-          </md-card-header>
+      <md-content>
+        <md-field>
+          <label for="bookTitle">Title:</label>
+          <md-input type="text" id="bookTitle" class="form-control" placeholder="Book Title" v-model="newBook.title"/>
+        </md-field>
+        <md-field>
+          <label for="bookAuthor">Author:</label>
+          <md-input type="text" id="bookAuthor" class="form-control" placeholder="Author" v-model="newBook.author"/>
+        </md-field>
+        <md-field>
+          <label for="bookUrl">Url:</label>
+          <md-input type="text" id="bookUrl" class="form-control" v-model="newBook.url"/>
+        </md-field>
+      </md-content>
 
-          <md-card-content>
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('firstName')">
-                  <label for="first-name">First Name</label>
-                  <md-input name="first-name" id="first-name" autocomplete="given-name" v-model="form.firstName" :disabled="sending" />
-                  <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                  <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span>
-                </md-field>
-              </div>
-
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('lastName')">
-                  <label for="last-name">Last Name</label>
-                  <md-input name="last-name" id="last-name" autocomplete="family-name" v-model="form.lastName" :disabled="sending" />
-                  <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                  <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span>
-                </md-field>
-              </div>
-            </div>
-
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('gender')">
-                  <label for="gender">Gender</label>
-                  <md-select name="gender" id="gender" v-model="form.gender" md-dense :disabled="sending">
-                    <md-option></md-option>
-                    <md-option value="M">M</md-option>
-                    <md-option value="F">F</md-option>
-                  </md-select>
-                  <span class="md-error">The gender is required</span>
-                </md-field>
-              </div>
-
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('age')">
-                  <label for="age">Age</label>
-                  <md-input type="number" id="age" name="age" autocomplete="age" v-model="form.age" :disabled="sending" />
-                  <span class="md-error" v-if="!$v.form.age.required">The age is required</span>
-                  <span class="md-error" v-else-if="!$v.form.age.maxlength">Invalid age</span>
-                </md-field>
-              </div>
-            </div>
-
-            <md-field :class="getValidationClass('email')">
-              <label for="email">Email</label>
-              <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
-              <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-              <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
-            </md-field>
-          </md-card-content>
-
-          <md-progress-bar md-mode="indeterminate" v-if="sending" />
-
-          <md-card-actions>
-            <md-button type="submit" class="md-primary" :disabled="sending">Create user</md-button>
-          </md-card-actions>
-        </md-card>
-
-        <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
-      </form>
-    </div> -->
+      <md-dialog-actions>
+        <md-button class="md-raised" @click="addBookModal = false">Close</md-button>
+        <md-button class="md-raised md-primary" @click="addBook">Add Book</md-button>
+      </md-dialog-actions>
+    </md-dialog>
     <router-view/>
 
     <!-- Delete Confirmation Modal -->
     <md-dialog
-      v-if="showDeleteConfirm"
-      :md-active.sync="showDeleteConfirm"
-      :md-fullscreen="false"
-    >
+      :md-active.sync="deleteBookModal"
+      :md-fullscreen="false" >
+
       <md-dialog-title>Delete this Book?</md-dialog-title>
 
       <div class="md-dialog-content">You cannot <strong>undo</strong> this action.</div>
 
       <md-dialog-actions>
-        <md-button class="md-default" @click="showDeleteConfirm = false">No</md-button>
-        <md-button class="md-accent" @click="removeBook(book)">Yes</md-button>
+        <md-button class="md-raised" @click="deleteBookModal = false">No</md-button>
+        <md-button class="md-raised md-primary" @click="removeBook()">Yes</md-button>
       </md-dialog-actions>
     </md-dialog>
 
@@ -162,7 +94,9 @@ export default {
         author: '',
         url: 'http://'
       },
-      showDeleteConfirm: false
+      deleteBookModal: false,
+      addBookModal: false,
+      bookToBeDeleted: null
     }
   },
   methods: {
@@ -171,9 +105,15 @@ export default {
       this.newBook.title = ''
       this.newBook.author = ''
       this.newBook.url = 'http://'
+      this.addBookModal = false
     },
-    removeBook: function (book) {
-      booksRef.child(book['.key']).remove()
+    openModel: function (book) {
+      this.deleteBookModal = true
+      this.bookToBeDeleted = book
+    },
+    removeBook: function () {
+      booksRef.child(this.bookToBeDeleted['.key']).remove()
+      this.deleteBookModal = false
       toastr.success('Book removed successfully')
     }
   },
@@ -216,5 +156,18 @@ export default {
 
 .md-table-head {
   text-align: center;
+}
+
+.md-dialog-container {
+  background: white;
+}
+
+.md-primary {
+  color: white;
+  background: #448aff;
+}
+
+.md-content {
+  padding: 1rem;
 }
 </style>
